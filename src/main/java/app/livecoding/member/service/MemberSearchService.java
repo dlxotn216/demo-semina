@@ -2,11 +2,10 @@ package app.livecoding.member.service;
 
 import app.livecoding.member.domain.repository.MemberRepository;
 import app.livecoding.member.interfaces.dto.MemberDto;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
-
-import java.util.stream.Collectors;
 
 /**
  * Created by taesu at : 2019-03-15
@@ -26,8 +25,10 @@ public class MemberSearchService {
         this.memberRepository = memberRepository;
     }
 
-    public Page<MemberDto.MemberSearchResponse> searchMembers(Pageable pageable) {
-        return this.memberRepository.findAllWithTeam(pageable)
+    public Page<MemberDto.MemberSearchResponse> searchMembers(Pageable pageable, BooleanExpression booleanExpression) {
+//        return this.memberRepository.findAllWithTeam(pageable, booleanExpression)
+//                .map(MemberDto::asMemberSearchResponse);
+        return this.memberRepository.findAllWithTeam(booleanExpression, pageable)
                 .map(MemberDto::asMemberSearchResponse);
     }
 
