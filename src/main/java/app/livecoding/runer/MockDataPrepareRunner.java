@@ -46,8 +46,8 @@ public class MockDataPrepareRunner implements ApplicationRunner {
         ));
 
         this.memberRepository.saveAll(Arrays.asList(
-                Member.builder().memberId("taesu").memberName("LeeTaeSu").email("test@naver.com").phone("01099952723").team(this.teamRepository.findById(1L).orElseThrow(IllegalArgumentException::new)).build(),
-                Member.builder().memberId("mjgu").memberName("GuMinJae").email("taesu@crscube.com").phone("01099568623").team(this.teamRepository.findById(2L).orElseThrow(IllegalArgumentException::new)).build(),
+                Member.builder().memberId("taesu").memberName("LeeTaeSu").email("test@naver.com").phone("01099952723").team(this.teamRepository.findById(5L).orElseThrow(IllegalArgumentException::new)).build(),
+                Member.builder().memberId("mjgu").memberName("GuMinJae").email("taesu@crscube.com").phone("01099568623").team(this.teamRepository.findById(1L).orElseThrow(IllegalArgumentException::new)).build(),
                 Member.builder().memberId("james").memberName("James").email("dlxotn@daum.net").phone("01056882733").team(this.teamRepository.findById(3L).orElseThrow(IllegalArgumentException::new)).build(),
                 Member.builder().memberId("wckim").memberName("KimWoonChul").email("pass@hanmir.com").phone("01059658723").team(this.teamRepository.findById(4L).orElseThrow(IllegalArgumentException::new)).build(),
                 Member.builder().memberId("jskim").memberName("KimJiSu").email("dlxotn12345@naver.com").phone("01095686583").team(this.teamRepository.findById(5L).orElseThrow(IllegalArgumentException::new)).build(),

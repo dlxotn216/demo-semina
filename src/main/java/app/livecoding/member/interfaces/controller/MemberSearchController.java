@@ -1,6 +1,5 @@
 package app.livecoding.member.interfaces.controller;
 
-import app.livecoding.member.interfaces.criteria.MemberPredicateBuilder;
 import app.livecoding.member.interfaces.dto.MemberDto;
 import app.livecoding.member.service.MemberSearchService;
 import org.springframework.data.domain.Page;
@@ -34,11 +33,9 @@ public class MemberSearchController {
     @GetMapping("/members")
     public ResponseEntity<Page<MemberDto.MemberSearchResponse>> searchMembers(
             @PageableDefault(sort = {"memberKey"}, direction = Sort.Direction.DESC, value = 5) Pageable pageable,
-            @RequestParam(name = "criteria", required = false, defaultValue = "") String criteria,
+            @RequestParam(name = "criteria", required = false, defaultValue = "") String searchOptionString,
             @RequestParam(name = "condition", required = false, defaultValue = "and") String condition) {
-
-        return ResponseEntity.ok(this.memberSearchService.searchMembers(
-                pageable, new MemberPredicateBuilder(criteria, condition).build()));
+        return ResponseEntity.ok(this.memberSearchService.searchMembers(searchOptionString, condition, pageable));
     }
 
     @GetMapping("/members/{memberKey}")

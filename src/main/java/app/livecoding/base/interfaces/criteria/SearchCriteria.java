@@ -1,38 +1,48 @@
 package app.livecoding.base.interfaces.criteria;
 
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
- * Created by taesu on 2019-03-10.
+ * Created by taesu at : 2019-03-18
+ *
+ * 여기에 SearchCriteria 클래스에 대한 설명을 기술해주세요
+ *
+ * @author taesu
+ * @version 1.0
+ * @since 1.0
  */
 @Data
+@Slf4j
 public class SearchCriteria {
-    private static final String AT_STRING = "__AT__";
-    private static final String DOT_STRING = "__DOT__";
-    private static final String AT_CHAR = "@";
-    private static final String DOT_CHAR = ".";
+    private List<SearchOption> options;
+    private String condition;
 
-    private String key;
-    private String operation;
-    private Object value;
 
-    public SearchCriteria(String key, String operation, Object value) {
-        this.key = key;
-        this.operation = operation;
-        if (value instanceof String) {
-            value = ((String) value).replaceAll(AT_STRING, AT_CHAR)
-                    .replaceAll(DOT_STRING, DOT_CHAR);
-        }
-        this.value = value;
-    }
-
-    public static String replaceAllToCompilable(String string) {
-        if (StringUtils.isEmpty(string)) {
-            return string;
+    public SearchCriteria(String searchOptionString, String condition) {
+        this.options = new ArrayList<>();
+        this.condition = condition;
+        if (StringUtils.isEmpty(searchOptionString)) {
+            return;
         }
 
-        return string.replaceAll(AT_CHAR, AT_STRING)
-                .replaceAll("\\" + DOT_CHAR, DOT_STRING);
+        Pattern pattern = Pattern.compile("(.+?)(=|!=|:|<|>|<=|>=)(.*?),", Pattern.UNICODE_CHARACTER_CLASS);
+        Matcher matcher = pattern.matcher(searchOptionString + ",");
+        while (matcher.find()) {
+            try {
+                options.add(new SearchOption(matcher.group(1),
+                                             SearchOperation.fromString(matcher.group(2)),
+                                             matcher.group(3)));
+            } catch (UnsupportedOperationException e) {
+                //Ignore...
+                log.warn("{} 에러로 인해 특정 criteria가 무시됩니다", e.getMessage(), e);
+            }
+        }
     }
 }

@@ -1,8 +1,8 @@
 package app.livecoding.member.service;
 
+import app.livecoding.base.interfaces.criteria.SearchCriteria;
 import app.livecoding.member.domain.repository.MemberRepository;
 import app.livecoding.member.interfaces.dto.MemberDto;
-import com.querydsl.core.types.dsl.BooleanExpression;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
@@ -25,10 +25,10 @@ public class MemberSearchService {
         this.memberRepository = memberRepository;
     }
 
-    public Page<MemberDto.MemberSearchResponse> searchMembers(Pageable pageable, BooleanExpression booleanExpression) {
-//        return this.memberRepository.findAllWithTeam(pageable, booleanExpression)
-//                .map(MemberDto::asMemberSearchResponse);
-        return this.memberRepository.findAllWithTeam(booleanExpression, pageable)
+    public Page<MemberDto.MemberSearchResponse> searchMembers(String searchOptionString, String condition, Pageable pageable) {
+        //Criteria의 Field에 따라 동적으로 repository의 method를 선택할 수도 있으나 (join과 연관하여)
+        //보통 criteria에 join 된 field로 검색한다면 결과도 조회되어야 하는 경우가 많으므로 분기하지 않음
+        return this.memberRepository.findAllWithTeam(new SearchCriteria(searchOptionString, condition), pageable)
                 .map(MemberDto::asMemberSearchResponse);
     }
 

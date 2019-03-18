@@ -27,8 +27,7 @@ import java.util.Optional;
  * @version 1.0
  * @since 1.0
  */
-public interface MemberRepository extends JpaRepository<Member, Long>, QuerydslPredicateExecutor<Member>,
-        QuerydslBinderCustomizer<QMember>, MemberCustomRepository {
+public interface MemberRepository extends JpaRepository<Member, Long>, QuerydslPredicateExecutor<Member>, MemberCustomRepository {
 
     Optional<Member> findByMemberId(@Param("memberId") String memberId);
 
@@ -42,9 +41,4 @@ public interface MemberRepository extends JpaRepository<Member, Long>, QuerydslP
     @Query(value = "select a from Member a left join fetch a.team",
             countQuery = "select COUNT(a.memberKey) from Member a inner join a.team")
     Page<Member> findAllWithTeam(Pageable pageable, Predicate booleanExpression);
-
-    @Override
-    default void customize(QuerydslBindings bindings, QMember root) {
-        bindings.bind(String.class).first((SingleValueBinding<StringPath, String>) StringExpression::containsIgnoreCase);
-    }
 }
