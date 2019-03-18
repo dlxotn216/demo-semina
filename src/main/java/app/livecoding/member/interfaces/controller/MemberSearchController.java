@@ -1,6 +1,5 @@
 package app.livecoding.member.interfaces.controller;
 
-import app.livecoding.base.interfaces.criteria.SearchCriteria;
 import app.livecoding.member.interfaces.criteria.MemberPredicateBuilder;
 import app.livecoding.member.interfaces.dto.MemberDto;
 import app.livecoding.member.service.MemberSearchService;
@@ -14,9 +13,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Created by taesu at : 2019-03-15
@@ -40,15 +36,9 @@ public class MemberSearchController {
             @PageableDefault(sort = {"memberKey"}, direction = Sort.Direction.DESC, value = 5) Pageable pageable,
             @RequestParam(name = "criteria", required = false, defaultValue = "") String criteria,
             @RequestParam(name = "condition", required = false, defaultValue = "and") String condition) {
-        MemberPredicateBuilder builder = new MemberPredicateBuilder();
-        if (criteria != null) {
-            Pattern pattern = Pattern.compile("(\\w+?)(=|!=|:|<|>|<=|>=)(\\w+?),", Pattern.UNICODE_CHARACTER_CLASS);
-            Matcher matcher = pattern.matcher(SearchCriteria.replaceAllToCompilable(criteria) + ",");
-            while (matcher.find()) {
-                builder.with(matcher.group(1), matcher.group(2), matcher.group(3));
-            }
-        }
-        return ResponseEntity.ok(this.memberSearchService.searchMembers(pageable, builder.build(condition)));
+
+        return ResponseEntity.ok(this.memberSearchService.searchMembers(
+                pageable, new MemberPredicateBuilder(criteria, condition).build()));
     }
 
     @GetMapping("/members/{memberKey}")

@@ -34,7 +34,7 @@ public class MockDataPrepareRunner implements ApplicationRunner {
     @Transactional
     @Override
     public void run(ApplicationArguments applicationArguments) throws Exception {
-        this.memberRepository.save(Member.builder().memberName("admin").memberId("admin").phone("0000").build());
+        this.memberRepository.save(Member.builder().memberName("admin").memberId("admin").email("@naver.com").phone("0000").build());
 
         this.teamRepository.saveAll(Arrays.asList(
                 Team.builder().teamName("team01").build(),
@@ -46,17 +46,17 @@ public class MockDataPrepareRunner implements ApplicationRunner {
         ));
 
         this.memberRepository.saveAll(Arrays.asList(
-                Member.builder().memberId("taesu").memberName("LeeTaeSu").phone("01099952723").team(this.teamRepository.findById(1L).orElseThrow(IllegalArgumentException::new)).build(),
-                Member.builder().memberId("mjgu").memberName("GuMinJae").phone("01099568623").team(this.teamRepository.findById(2L).orElseThrow(IllegalArgumentException::new)).build(),
-                Member.builder().memberId("james").memberName("James").phone("01056882733").team(this.teamRepository.findById(3L).orElseThrow(IllegalArgumentException::new)).build(),
-                Member.builder().memberId("wckim").memberName("KimWoonChul").phone("01059658723").team(this.teamRepository.findById(4L).orElseThrow(IllegalArgumentException::new)).build(),
-                Member.builder().memberId("jskim").memberName("KimJiSu").phone("01095686583").team(this.teamRepository.findById(5L).orElseThrow(IllegalArgumentException::new)).build(),
-                Member.builder().memberId("jmc90").memberName("JoMinChul").phone("01095686583").team(this.teamRepository.findById(6L).orElseThrow(IllegalArgumentException::new)).build(),
-                Member.builder().memberId("yjpark").memberName("ParkYoungJin").phone("01098567723").team(this.teamRepository.findById(1L).orElseThrow(IllegalArgumentException::new)).build(),
-                Member.builder().memberId("tshwang").memberName("HwangTaeJung").phone("01023554563").team(this.teamRepository.findById(2L).orElseThrow(IllegalArgumentException::new)).build(),
-                Member.builder().memberId("ebseo").memberName("SeoEnBul").phone("01023552523").team(this.teamRepository.findById(3L).orElseThrow(IllegalArgumentException::new)).build(),
-                Member.builder().memberId("djjeong").memberName("JeongDaJeong").phone("01092355723").team(this.teamRepository.findById(4L).orElseThrow(IllegalArgumentException::new)).build(),
-                Member.builder().memberId("chlee").memberName("LeeChanHo").phone("01091233243").team(this.teamRepository.findById(5L).orElseThrow(IllegalArgumentException::new)).build()
+                Member.builder().memberId("taesu").memberName("LeeTaeSu").email("test@naver.com").phone("01099952723").team(this.teamRepository.findById(1L).orElseThrow(IllegalArgumentException::new)).build(),
+                Member.builder().memberId("mjgu").memberName("GuMinJae").email("taesu@crscube.com").phone("01099568623").team(this.teamRepository.findById(2L).orElseThrow(IllegalArgumentException::new)).build(),
+                Member.builder().memberId("james").memberName("James").email("dlxotn@daum.net").phone("01056882733").team(this.teamRepository.findById(3L).orElseThrow(IllegalArgumentException::new)).build(),
+                Member.builder().memberId("wckim").memberName("KimWoonChul").email("pass@hanmir.com").phone("01059658723").team(this.teamRepository.findById(4L).orElseThrow(IllegalArgumentException::new)).build(),
+                Member.builder().memberId("jskim").memberName("KimJiSu").email("dlxotn12345@naver.com").phone("01095686583").team(this.teamRepository.findById(5L).orElseThrow(IllegalArgumentException::new)).build(),
+                Member.builder().memberId("jmc90").memberName("JoMinChul").email("dlxotn216@gmail.com").phone("01095686583").team(this.teamRepository.findById(6L).orElseThrow(IllegalArgumentException::new)).build(),
+                Member.builder().memberId("yjpark").memberName("ParkYoungJin").email("park@naver.com").phone("01098567723").team(this.teamRepository.findById(1L).orElseThrow(IllegalArgumentException::new)).build(),
+                Member.builder().memberId("tshwang").memberName("HwangTaeJung").email("crscube@gmail.com").phone("01023554563").team(this.teamRepository.findById(2L).orElseThrow(IllegalArgumentException::new)).build(),
+                Member.builder().memberId("ebseo").memberName("SeoEnBul").email("parse@daum.net").phone("01023552523").team(this.teamRepository.findById(3L).orElseThrow(IllegalArgumentException::new)).build(),
+                Member.builder().memberId("djjeong").memberName("JeongDaJeong").email("user@omg.com").phone("01092355723").team(this.teamRepository.findById(4L).orElseThrow(IllegalArgumentException::new)).build(),
+                Member.builder().memberId("chlee").memberName("LeeChanHo").email("test@test.com").phone("01091233243").team(this.teamRepository.findById(5L).orElseThrow(IllegalArgumentException::new)).build()
         ));
     }
 }

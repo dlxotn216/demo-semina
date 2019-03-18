@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 
 /**
  * Created by taesu at : 2019-03-15
@@ -37,8 +38,15 @@ public class Member {
     @Column(name = "MEMBER_NAME", nullable = false)
     private String memberName;
 
+    @Column(name = "EMAIL", nullable = false)
+    private String email;
+
     @Column(name = "PHONE")
     private String phone;
+
+    @Column(name = "STARTED_AT")
+    @Builder.Default
+    private LocalDate startedAt = LocalDate.now();
 
     @ManyToOne
     @JoinColumn(name = "TEAM_KEY")
