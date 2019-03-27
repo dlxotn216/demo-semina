@@ -1,19 +1,14 @@
 package app.livecoding.member.domain.repository;
 
 import app.livecoding.member.domain.model.Member;
-import app.livecoding.member.domain.model.QMember;
 import app.livecoding.member.infra.MemberCustomRepository;
 import com.querydsl.core.types.Predicate;
-import com.querydsl.core.types.dsl.StringExpression;
-import com.querydsl.core.types.dsl.StringPath;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
-import org.springframework.data.querydsl.binding.QuerydslBinderCustomizer;
-import org.springframework.data.querydsl.binding.QuerydslBindings;
-import org.springframework.data.querydsl.binding.SingleValueBinding;
+import org.springframework.data.repository.history.RevisionRepository;
 import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
@@ -27,7 +22,10 @@ import java.util.Optional;
  * @version 1.0
  * @since 1.0
  */
-public interface MemberRepository extends JpaRepository<Member, Long>, QuerydslPredicateExecutor<Member>, MemberCustomRepository {
+public interface MemberRepository extends JpaRepository<Member, Long>,
+                                          QuerydslPredicateExecutor<Member>,
+                                          MemberCustomRepository,
+                                          RevisionRepository<Member, Long, Integer> {
 
     Optional<Member> findByMemberId(@Param("memberId") String memberId);
 

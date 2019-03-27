@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.envers.Audited;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -25,6 +26,7 @@ import java.time.LocalDate;
 @Table(name = "MEMBER")
 @Entity
 @SequenceGenerator(name = "MEMBER_SEQ", sequenceName = "MEMBER_SEQ")
+@Audited(withModifiedFlag = true)
 public class Member {
 
     @Id

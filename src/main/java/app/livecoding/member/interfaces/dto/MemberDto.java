@@ -44,5 +44,6 @@ public final class MemberDto {
         private String memberId;
         private String memberName;
         private String phone;
+        private String email;
     }
 }

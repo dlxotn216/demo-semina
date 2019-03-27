@@ -32,6 +32,7 @@ public class MemberCreateService {
 
         Member member = Member.builder().memberId(request.getMemberId())
                 .memberName(request.getMemberName())
+                .email(request.getEmail())
                 .phone(request.getPhone()).build();
         return asMemberSearchResponse(this.memberRepository.save(member));
 

@@ -12,8 +12,10 @@ import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.PathBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.util.CollectionUtils;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
@@ -45,7 +47,7 @@ public final class MemberPredicateBuilder {
         }
 
         return searchCriteria.getOptions().stream()
-                .map(criteria -> with(criteria, memberAlias, teamAlias))
+                .map(criteria -> withExpression(criteria, memberAlias, teamAlias))
                 .filter(Objects::nonNull)
                 .reduce(searchCriteria.getCondition().equalsIgnoreCase("and")
                                 ? Expressions.asBoolean(true).isTrue()
@@ -55,7 +57,7 @@ public final class MemberPredicateBuilder {
                                 : BooleanExpression::or);
     }
 
-    private static BooleanExpression with(SearchOption searchCriteria, String memberAlias, String teamAlias) {
+    private static BooleanExpression withExpression(SearchOption searchCriteria, String memberAlias, String teamAlias) {
         PathBuilder<?> entityPath;
         if (PROPERTY_OWNER_MAP.getOrDefault(searchCriteria.getKey(), Member.class) == Team.class) {
             entityPath = new PathBuilder<>(Team.class, teamAlias);
@@ -91,17 +93,35 @@ public final class MemberPredicateBuilder {
 
     public static OrderSpecifier[] buildOrder(Pageable pageable, String memberAlias, String teamAlias) {
         return pageable.getSort().stream()
-                .map(order -> {
-                    OrderSpecifier orderSpecifier;
-                    if (PROPERTY_OWNER_MAP.getOrDefault(order.getProperty(), Member.class) == Team.class) {
-                        orderSpecifier = new OrderSpecifier(Order.valueOf(order.getDirection().name()),
-                                                            new PathBuilder<>(Team.class, teamAlias));
-                    } else {
-                        orderSpecifier = new OrderSpecifier(Order.valueOf(order.getDirection().name()),
-                                                            new PathBuilder<>(Member.class, memberAlias));
-                    }
-                    return orderSpecifier;
-                })
+                .map(order -> withOrder(memberAlias, teamAlias, order))
                 .toArray(OrderSpecifier[]::new);
+    }
+
+    private static OrderSpecifier<? extends Serializable> withOrder(String memberAlias, String teamAlias, Sort.Order order) {
+        PathBuilder<?> entityPath;
+        if (PROPERTY_OWNER_MAP.getOrDefault(order.getProperty(), Member.class) == Team.class) {
+            entityPath = new PathBuilder<>(Team.class, teamAlias);
+        } else {
+            entityPath = new PathBuilder<>(Member.class, memberAlias);
+        }
+
+        final Class propertyType = PROPERTY_TYPE_MAP.getOrDefault(order.getProperty(), String.class);
+        if (propertyType == Long.class) {
+            return new OrderSpecifier<>(Order.valueOf(order.getDirection().name()),
+                                        entityPath.getNumber(order.getProperty(), Long.class));
+        } else if (propertyType == Double.class) {
+            return new OrderSpecifier<>(Order.valueOf(order.getDirection().name()),
+                                        entityPath.getNumber(order.getProperty(), Double.class));
+        } else if (propertyType == Integer.class) {
+            return new OrderSpecifier<>(Order.valueOf(order.getDirection().name()),
+                                        entityPath.getNumber(order.getProperty(), Integer.class));
+        } else if (propertyType == LocalDate.class) {
+            return new OrderSpecifier<>(Order.valueOf(order.getDirection().name()),
+                                        entityPath.getDate(order.getProperty(), LocalDate.class));
+        } else if (propertyType == String.class) {
+            return new OrderSpecifier<>(Order.valueOf(order.getDirection().name()),
+                                        entityPath.getString(order.getProperty()));
+        }
+        return null;
     }
 }

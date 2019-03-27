@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.envers.Audited;
 import org.springframework.util.CollectionUtils;
 
 import javax.persistence.*;
@@ -27,6 +28,7 @@ import java.util.List;
 @Table
 @Entity
 @SequenceGenerator(name = "TEAM_SEQ", sequenceName = "TEAM_SEQ")
+@Audited
 public class Team {
 
     @Id
